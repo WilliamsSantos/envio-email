@@ -1,28 +1,23 @@
-class Contact < ApplicationRecord
-
+class Contact 
     include ActiveModel::Validations
     include ActiveModel::Conversion
     extend ActiveModel::Naming
-
-    attr_accessor :email, :message, :name, :subject
-
-    validates :name,
-            :length => {:in => 2..50}
-
-    validates :email,
-            :format => { :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }  
-
-    validates :message,
-            :length => {:in => 10..750}
-
+  
+    attr_accessor :name, :subject, :message, :email
+  
+    validates :name, :length => {:in => 2..50}
+  
+    validates_presence_of :email, :with => /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i  
+  
+    validates :message, :length => {:in => 10..750}
+  
     def initialize(attributes = {})
-        attributes.each do |name, value|
-            send("#{name}=", value)
-        end
-    end  
-    
-    def persisted?
-        false
+      attributes.each do |name, value|
+        send("#{name}=", value)
+      end
     end
-
-end
+  
+    def persisted?
+      false
+    end
+  end
